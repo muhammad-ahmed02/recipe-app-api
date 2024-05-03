@@ -13,6 +13,8 @@ class RecipeViewSet(viewsets.ModelViewSet):
     """Manage recipes in the database."""
     serializer_class = serializers.RecipeDetailSerializer
     queryset = Recipe.objects.all()
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         """Retrieve the recipes for the authenticated user."""
@@ -35,11 +37,11 @@ class BaseRecipeAttrViewSet(mixins.ListModelMixin,
                             mixins.DestroyModelMixin,
                             viewsets.GenericViewSet):
     """Base viewset for user owned recipe attributes."""
-    authentication_classes = [TokenAuthentication]
-    permission_classes = [IsAuthenticated]
+    authentication_classes = (TokenAuthentication,)
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        """Retrieve the objects for the authenticated user."""
+        """Retrieve the queryset for the authenticated user."""
         return self.queryset.filter(user=self.request.user).order_by('-name')
 
 
